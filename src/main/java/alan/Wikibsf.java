@@ -10,6 +10,7 @@ import com.fasterxml.jackson.core.exc.StreamReadException;
 import java.net.URL;
 
 import java.util.*;
+import java.io.File;
 
 public class Wikibsf{
     final ObjectMapper mapper = new ObjectMapper();
@@ -18,8 +19,21 @@ public class Wikibsf{
     Map<String, String> pageMap = new HashMap<String, String>();
     String goalPage;
     String currentPage;
-    public Wikibsf(String startingPage, String goalPage){
-        conductBFS(startingPage, goalPage);
+    public Wikibsf(File input){
+        try{
+            Input inputs = mapper.readValue(input, Input.class);
+            conductBFS(inputs.getStart(), inputs.getFinish());
+
+        }
+        catch (StreamReadException e){
+            System.out.println(1);
+        }
+        catch(DatabindException e){
+            System.out.println(2);
+        }
+        catch(IOException e){
+            System.out.println("exception with IO");
+        }
         
     }
     public void conductBFS(String startingPage, String goalPage){
